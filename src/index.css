@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -17,6 +16,12 @@
 
 .ant-radio-disabled.ant-radio-checked .ant-radio-inner::after {
   transform: scale(1) !important;
+}
+.ant-radio-checked .ant-radio-inner::after {
+  transition: none !important;
+}
+.ant-checkbox-inner {
+  transition: none !important;
 }
 
 .ant-checkbox-disabled .ant-checkbox-inner:after {
@@ -36,5 +41,10 @@
 }
 
 .ant-checkbox-wrapper-checked .ant-checkbox-checked + span {
-  color: black;
+  color: black !important;
+}
+
+.ant-btn {
+  height: 100%;
+  padding: 16px 68px 16px 68px
 }

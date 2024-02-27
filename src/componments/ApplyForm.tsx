@@ -9,7 +9,8 @@ import {
   Button,
   Checkbox,
 } from 'antd';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { data } from '../data/data.js';
 
 const toolOptions: string[] = [
   'Redux',
@@ -19,29 +20,53 @@ const toolOptions: string[] = [
   'Other',
 ];
 
+interface DataInterface {
+  isProficient: boolean;
+  toolsUsed: string;
+}
+interface Option {
+  label: string;
+  value: string;
+  disabled?: boolean;
+}
 const CheckboxGroup = Checkbox.Group;
 
 const ApplyForm = () => {
   const [form] = Form.useForm();
   const [disabled, setDisabled] = useState<boolean>(false);
-  const [proficient, setProficient] = useState<boolean>(false);
-  const [checkedList, setCheckedList] = useState<string[]>([]);
+  const [formData, setFormData] = useState<DataInterface>(data);
 
   const onChangeSwitch = () => {
-    setDisabled(pre => !pre);
-  };
-  const onChangeCheckbox = (list: string[]) => {
-    setCheckedList(list);
+    setDisabled(prev => !prev);
   };
 
+  const onChangeCheckbox = (checkedValues: string[]) => {
+    setFormData(prev => ({
+      ...prev,
+      toolsUsed: checkedValues.join(','),
+    }));
+  };
+
+  const checkboxOptions: Option[] = useMemo(() => {
+    return toolOptions.map((option, index) => ({
+      label: option,
+      value: index.toString(), // Since you're using indices as values in `toolsUsed`
+    }));
+  }, []);
+
+  const convertCheckboxValue = useMemo(() => {
+    return formData.toolsUsed.split(',');
+  }, [formData.toolsUsed]);
+
   const onChangeRadio = (e: RadioChangeEvent) => {
-    setProficient(e.target.value);
+    setFormData(pre => ({
+      ...pre,
+      isProficient: e.target.value,
+    }));
   };
 
   const onSubmit = () => {
-    console.log(proficient, checkedList);
-    console.log('is proficient is React?', proficient ? 'Yes' : 'No');
-    console.log('Tools:', checkedList);
+    console.log(formData);
   };
 
   return (
@@ -80,15 +105,17 @@ const ApplyForm = () => {
             >
               <Space direction="vertical" className="flex items-start">
                 <Radio
-                  className={` ${proficient ? 'text-remark' : 'text-black'}`}
+                  className={` ${formData.isProficient ? 'text-remark' : 'text-black'}`}
                   defaultChecked
+                  checked={!formData.isProficient}
                   value={false}
                 >
                   No
                 </Radio>
                 <Radio
-                  className={` ${proficient ? 'text-black' : 'text-remark'}`}
+                  className={` ${formData.isProficient ? 'text-black' : 'text-remark'}`}
                   value={true}
+                  checked={formData.isProficient}
                 >
                   Yes
                 </Radio>
@@ -110,17 +137,16 @@ const ApplyForm = () => {
           <CheckboxGroup
             disabled={disabled}
             className="flex flex-col gap-[15px]"
-            options={toolOptions}
-            value={checkedList}
+            options={checkboxOptions}
+            value={convertCheckboxValue}
             onChange={onChangeCheckbox}
           />
         </Form.Item>
         <Form.Item className="w-full flex justify-center">
           <Button
             disabled={disabled}
-            size="large"
             htmlType="submit"
-            className="bg-dark-purple rounded-2xl hover:bg-dark-purple hover:text-white text-white disabled:text-white font-semibold text-lg disabled:bg-disabled-purple"
+            className="bg-dark-purple rounded-full hover:bg-dark-purple hover:text-white text-white disabled:text-white font-semibold text-lg disabled:bg-disabled-purple"
           >
             Process
           </Button>

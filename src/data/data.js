@@ -1,5 +1,5 @@
-const data={
-	isProficient:false,
+export const data = {
+	isProficient: false,
 	/**
 	 * values for toolsUsed. Please note that the values are stored in a string, not an array
 	 * 0:	Redux
@@ -8,5 +8,5 @@ const data={
 	 * 3:	Webpack
 	 * 4:	Other
 	 */
-	toolsUsed:"0,2,3,4",
+	toolsUsed: "0,2,3,4",
 }
