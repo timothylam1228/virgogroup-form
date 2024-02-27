@@ -1,35 +1,35 @@
 import {
   Switch,
-  Radio,
   Card,
   Typography,
   Form,
   Space,
   RadioChangeEvent,
   Button,
-  Checkbox,
 } from 'antd';
 import { useMemo, useState } from 'react';
 import { data } from '../data/data.js';
+import CustomRadioGroup, {
+  RadioOptionsInterface,
+} from './CustomRadioGroup.tsx';
+import CustomCheckboxGroup, { CheckboxOption } from './CustomCheckboxGroup.tsx';
 
-const toolOptions: string[] = [
-  'Redux',
-  'Lodash',
-  'Ant design',
-  'Webpack',
-  'Other',
+const toolOptions: CheckboxOption[] = [
+  { label: 'Redux', value: 0 },
+  { label: 'Lodash', value: 1 },
+  { label: 'Ant design', value: 2 },
+  { label: 'Webpack', value: 3 },
+  { label: 'Other', value: 4 },
+];
+const radioOptions: RadioOptionsInterface[] = [
+  { label: 'No', value: false },
+  { label: 'Yes', value: true },
 ];
 
 interface DataInterface {
   isProficient: boolean;
   toolsUsed: string;
 }
-interface Option {
-  label: string;
-  value: string;
-  disabled?: boolean;
-}
-const CheckboxGroup = Checkbox.Group;
 
 const ApplyForm = () => {
   const [form] = Form.useForm();
@@ -40,19 +40,14 @@ const ApplyForm = () => {
     setDisabled(prev => !prev);
   };
 
-  const onChangeCheckbox = (checkedValues: string[]) => {
+  const onChangeCheckbox = (
+    checkedValues: Array<string | number | boolean>,
+  ) => {
     setFormData(prev => ({
       ...prev,
       toolsUsed: checkedValues.join(','),
     }));
   };
-
-  const checkboxOptions: Option[] = useMemo(() => {
-    return toolOptions.map((option, index) => ({
-      label: option,
-      value: index.toString(), // Since you're using indices as values in `toolsUsed`
-    }));
-  }, []);
 
   const convertCheckboxValue = useMemo(() => {
     return formData.toolsUsed.split(',');
@@ -95,33 +90,14 @@ const ApplyForm = () => {
           </Typography>
         </Form.Item>
         <Form.Item>
-          <Typography>
-            <Radio.Group
-              disabled={disabled}
-              name="proficient"
-              defaultValue={false}
-              buttonStyle={'solid'}
-              onChange={onChangeRadio}
-            >
-              <Space direction="vertical" className="flex items-start">
-                <Radio
-                  className={` ${formData.isProficient ? 'text-remark' : 'text-black'}`}
-                  defaultChecked
-                  checked={!formData.isProficient}
-                  value={false}
-                >
-                  No
-                </Radio>
-                <Radio
-                  className={` ${formData.isProficient ? 'text-black' : 'text-remark'}`}
-                  value={true}
-                  checked={formData.isProficient}
-                >
-                  Yes
-                </Radio>
-              </Space>
-            </Radio.Group>
-          </Typography>
+          <CustomRadioGroup
+            options={radioOptions}
+            defaultValue={formData.isProficient}
+            disabled={disabled}
+            onChange={onChangeRadio}
+            value={formData.isProficient}
+            direction="vertical"
+          />
         </Form.Item>
         <Form.Item>
           <Space direction="vertical" className="flex items-start">
@@ -134,12 +110,13 @@ const ApplyForm = () => {
           </Space>
         </Form.Item>
         <Form.Item>
-          <CheckboxGroup
-            disabled={disabled}
-            className="flex flex-col gap-[15px]"
-            options={checkboxOptions}
-            value={convertCheckboxValue}
+          <CustomCheckboxGroup
+            className={'flex flex-col gap-4'}
+            disable={disabled}
+            options={toolOptions}
             onChange={onChangeCheckbox}
+            defaultValue={convertCheckboxValue}
+            value={convertCheckboxValue}
           />
         </Form.Item>
         <Form.Item className="w-full flex justify-center">

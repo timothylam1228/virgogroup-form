@@ -1,0 +1,29 @@
+.ant-checkbox-inner {
+  transition: none !important;
+}
+
+.ant-checkbox-disabled .ant-checkbox-inner:after {
+  display: none !important;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner:after {
+  display: none !important;
+}
+
+.ant-checkbox-checked.ant-checkbox-disabled .ant-checkbox-inner {
+  background: #d8d8d8 !important;
+}
+
+.ant-checkbox-group-item {
+  color: #616161 !important;
+}
+
+.ant-checkbox-wrapper-checked .ant-checkbox-checked + span {
+  color: black !important;
+}
+
+.ant-checkbox-wrapper:not(.ant-checkbox-wrapper-disabled):hover
+  .ant-checkbox-checked:not(.ant-checkbox-disabled)
+  .ant-checkbox-inner {
+  background-color: #6b47ed;
+}

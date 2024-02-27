@@ -1,0 +1,6 @@
+.ant-radio-disabled.ant-radio-checked .ant-radio-inner::after {
+  transform: scale(1) !important;
+}
+.ant-radio-checked .ant-radio-inner::after {
+  transition: none !important;
+}
